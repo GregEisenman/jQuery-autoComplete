@@ -39,8 +39,8 @@
             that.updateSC = function(resize, next){
                 that.sc.css({
                     top: that.offset().top + that.outerHeight(),
-                    left: that.offset().left,
-                    width: that.outerWidth()
+                    left: that.offset().left //,
+                    //width: that.outerWidth()
                 });
                 if (!resize) {
                     that.sc.show();
@@ -94,13 +94,48 @@
                 var val = that.val();
                 that.cache[val] = data;
                 if (data.length && val.length >= o.minChars) {
-                    var s = '';
+                    var s = '<div class="mega_suggestions" style="float:left;width:200px;">';
                     for (i=0;i<data.length;i++) s += o.renderItem(data[i], val);
+                    s += '</div>';
+                    s += renderProducts();
+                    s += renderCats();
                     that.sc.html(s);
                     that.updateSC(0);
                 }
                 else
                     that.sc.hide();
+            }
+
+            function renderProducts() {
+                var output = '<div class="products" style="float:left;width:275px;background:#f0f0f0;height:400px">';
+                output += '<h4>Top results for keyword</h4>';
+                for (i=0;i<9;i++) {
+                    output += '<div class="product_box" style="margin:5px;float:left;height:75px;width:75px;background-color:#FFFFFF;"></div>';
+                }
+                output += '</div>';
+                return output;
+            }
+
+            function renderCats() {
+                var output = '<div class="cats" style="float:left;width:200px;height:400px">';
+                output += '<h4>Brands</h4>';
+                output += '<ul>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '</ul>';
+                output += '<h4>Cats</h4>';
+                output += '<ul>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '<li>Test</li>';
+                output += '</ul>';
+                output += '</div>';
+                return output;
             }
 
             that.on('keydown.autocomplete', function(e){

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <style>
+        /* autoComplete styles */
+        .autocomplete-suggestions {
+            text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+
+            /* core styles should not be changed */
+            position: absolute; display: none; z-index: 9999; /*max-height: 254px;*/ overflow: hidden; overflow-y: auto; box-sizing: border-box;
+        }
+        .autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; font-size: 1.02em; color: #333; }
+        .autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
+        .autocomplete-suggestion.selected { background: #f0f0f0; }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="jquery.auto-complete.js"></script>
+    <script>
+        $(function(){
+            $('#searchbox').autoComplete({
+                minChars: 1,
+                source: function(term, suggest){
+                    term = term.toLowerCase();
+                    var choices = ['ActionScript', 'AppleScript', 'Asp', 'Assembly', 'BASIC', 'Batch', 'C', 'C++', 'CSS', 'Clojure', 'COBOL', 'ColdFusion', 'Erlang', 'Fortran', 'Groovy', 'Haskell', 'HTML', 'Java', 'JavaScript', 'Lisp', 'Perl', 'PHP', 'PowerShell', 'Python', 'Ruby', 'Scala', 'Scheme', 'SQL', 'TeX', 'XML'];
+                    var suggestions = [];
+                    $.ajax({
+                        url: "http://search.saltcityoptics.com/suggest",
+                        jsonp: "callback",
+                        dataType: "jsonp",
+                        data: {
+                            q: term
+                        },
+                        success: function( response ) {
+                            //console.log(response);
+                            jQuery.each(response, function(index, item) {
+                                //console.log(item);
+                                if (item.type == "keyword") {
+                                    suggestions.push(item.value);
+                                }
+                            });
+                            suggest(suggestions);
+                        }
+                    });
+                    //for (i=0;i<choices.length;i++)
+                       // if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                    //suggest(suggestions);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <form onsubmit="$('#searchbox').blur().focus();return false;">
+        <input id="searchbox" autofocus type="text" name="q" placeholder="Programming languages ...">
+    </form>
+</body>
+</html>
