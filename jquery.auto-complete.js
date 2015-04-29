@@ -102,8 +102,8 @@
                 var products = [];
                 var brands = [];
                 $.ajax({
-                    //url: "http://search.saltcityoptics.com/suggest",
-                    url: "http://ss.dev/suggest",
+                    url: "http://search.saltcityoptics.com/suggest",
+                    //url: "http://ss.dev/suggest",
                     jsonp: "callback",
                     dataType: "jsonp",
                     data: {
