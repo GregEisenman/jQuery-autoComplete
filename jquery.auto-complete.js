@@ -5,6 +5,10 @@
 	License: http://www.opensource.org/licenses/mit-license.php
 */
 
+/*
+ http://xpresswebsolutionz.com/search_box/2/
+ */
+
 (function($){
     $.fn.autoComplete = function(options){
         var o = $.extend({}, $.fn.autoComplete.defaults, options);
@@ -56,7 +60,8 @@
                                 that.sc.scrollTop(selTop + scrTop);
                         }
                 }
-            }
+            };
+
             $(window).on('resize.autocomplete', that.updateSC);
 
             that.sc.appendTo('body');
@@ -68,6 +73,9 @@
             that.sc.on('mouseenter.autocomplete', '.autocomplete-suggestion', function (){
                 $('.autocomplete-suggestion.selected').removeClass('selected');
                 $(this).addClass('selected');
+                var item = $(this), v = item.data('val');
+                console.log("This: "+v);
+                getSecondaryData(v);
             });
 
             that.sc.on('mousedown.autocomplete', '.autocomplete-suggestion', function (e){
@@ -77,6 +85,7 @@
                 setTimeout(function(){ that.focus().sc.hide(); }, 10);
             });
 
+            // IE hack ***: input looses focus when clicking scrollbars in suggestions container
             that.blur(function(){
                 try { over_sb = $('.autocomplete-suggestions:hover').length; } catch(e){ over_sb = 0; } // ***
                 if (!over_sb) {
@@ -85,20 +94,54 @@
                 }
             });
 
-            // IE hack ***: input looses focus when clicking scrollbars in suggestions container
             that.sc.focus(function(){
                 that.focus();
             });
 
-            function suggest(data){
+            function getSecondaryData(val) {
+                var products = [];
+                var brands = [];
+                $.ajax({
+                    //url: "http://search.saltcityoptics.com/suggest",
+                    url: "http://ss.dev/suggest",
+                    jsonp: "callback",
+                    dataType: "jsonp",
+                    data: {
+                        q: val
+                    },
+                    success: function( response ) {
+                        //console.log(response);
+                        jQuery.each(response, function(index, item) {
+                            //console.log(item);
+                            if (item.type == "product") {
+                                products.push(item);
+                            } else if (item.type == "brand") {
+                                brands.push(item);
+                            }
+                        });
+                        refreshSecondaryData(val, products, brands);
+                    }
+                });
+            }
+
+            function refreshSecondaryData(val, products, brands) {
+                $('.autocomplete-suggestions div.products_container').fadeOut('fast', function () {
+                    $(this).html(renderProducts(products, val)).fadeIn('fast');
+                });
+                $('.autocomplete-suggestions div.cats_container').fadeOut('fast', function () {
+                    $(this).html(renderCats(brands)).fadeIn('fast');
+                });
+                //$('.autocomplete-suggestions div.products').html(renderProducts(products));
+                //$('.autocomplete-suggestions div.cats').html(renderCats(brands));
+            }
+
+            function suggest(suggestions, products, brands){
                 var val = that.val();
-                that.cache[val] = data;
-                if (data.length && val.length >= o.minChars) {
-                    var s = '<div class="mega_suggestions" style="float:left;width:200px;">';
-                    for (i=0;i<data.length;i++) s += o.renderItem(data[i], val);
-                    s += '</div>';
-                    s += renderProducts();
-                    s += renderCats();
+                that.cache[val] = suggestions; //hmmm, will this populate all fields (brands, products) EDIT: nope!
+                if (suggestions.length && val.length >= o.minChars) {
+                    s = renderSuggestions(suggestions, val);
+                    if (products) s += renderProducts(products, val);
+                    if (brands) s += renderCats(brands);
                     that.sc.html(s);
                     that.updateSC(0);
                 }
@@ -106,34 +149,44 @@
                     that.sc.hide();
             }
 
-            function renderProducts() {
-                var output = '<div class="products" style="float:left;width:275px;background:#f0f0f0;height:400px">';
-                output += '<h4>Top results for keyword</h4>';
-                for (i=0;i<9;i++) {
-                    output += '<div class="product_box" style="margin:5px;float:left;height:75px;width:75px;background-color:#FFFFFF;"></div>';
+            function renderSuggestions(suggestions, val) {
+                //console.log(val);
+                var output = '<div class="mega_suggestions" style="float:left;width:200px;">';
+                for (i=0;i<suggestions.length;i++) {
+                    output += o.renderItem(suggestions[i], val);
                 }
                 output += '</div>';
                 return output;
             }
 
-            function renderCats() {
+            function renderProducts(products, val) {
+                //console.log(products[0]);
+                var output = '<div class="products">';
+                output += '<div class="products_container">';
+                output += '<h3>Top Results for "'+val+'"</h3>';
+                for (i=0;i<products.length;i++) {
+                    output += '<div class="product_box">';
+                    output += '<a href="'+products[i].url+'"><img src="'+products[i].image+'" height="120" width="120" border="0" /></a>';
+                    output += '<div class="title"><a href="'+products[i].url+'"><h4>'+products[i].title+'</h4></a></div>';
+                    output += '<div class="price">$'+parseFloat(products[i].price).toFixed(2)+'</div>';
+                    output += '</div>';
+                }
+                output += '</div>';
+                output += '</div>';
+                return output;
+            }
+
+            function renderCats(brands) {
+                console.log(brands[0]);
                 var output = '<div class="cats" style="float:left;width:200px;height:400px">';
-                output += '<h4>Brands</h4>';
+                output += '<div class="cats_container">';
+                output += '<h3>Brands</h3>';
                 output += '<ul>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
+                for (i=0;i<brands.length;i++) {
+                    output += '<li>'+brands[i].value+'</li>';
+                }
                 output += '</ul>';
-                output += '<h4>Cats</h4>';
-                output += '<ul>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '<li>Test</li>';
-                output += '</ul>';
+                output += '</div>';
                 output += '</div>';
                 return output;
             }
@@ -206,12 +259,12 @@
                 }
             });
         });
-    }
+    };
 
     $.fn.autoComplete.defaults = {
         source: 0,
-        minChars: 3,
-        delay: 100,
+        minChars: 2,
+        delay: 70,
         cache: 1,
         menuClass: '',
         renderItem: function (item, search){

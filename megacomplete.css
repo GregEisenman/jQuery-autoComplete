@@ -1,0 +1,48 @@
+body { background-image: url("img/bg.jpg"); background-repeat: no-repeat; }
+
+#searchbox { padding:15px; width:350px; font-size: 15px; font-family:arial; }
+
+/* autoComplete styles */
+.autocomplete-suggestions {
+    text-align: left;
+    cursor: default;
+    border: 1px solid #ebebeb;
+    background: #FFFFFF;
+    font-family: arial;
+    border-bottom-color: #333E69;
+    margin-top: 1px;
+
+    /* core styles should not be changed */
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    /*max-height: 254px;*/
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    width:940px;
+}
+.autocomplete-suggestion { cursor:pointer; position: relative; padding: 15px 15px; white-space: nowrap; overflow: hidden; font-size: 15px; color: #555; }
+.autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
+.autocomplete-suggestion.selected { background: #f2f2f2; font-weight: bold; color:#333E69; text-decoration: underline; }
+.autocomplete-suggestions h3 {
+    padding-top: 10px;
+    margin: 0;
+    font-weight: normal;
+    font-style: italic;
+    color: #333E69;
+    padding-left: 15px;
+}
+.autocomplete-suggestions .products {  float:left; width:534px; background:#f2f2f2; height:470px; }
+.autocomplete-suggestions .products .product_box { padding-top:15px; margin:0 10px; float:left; height:200px; width:158px; text-align:center;}
+.autocomplete-suggestions .products .title {   word-wrap: break-word; }
+.autocomplete-suggestions .products .title h4 {
+    margin: 0 auto;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.25;
+    text-transform: uppercase;
+    color: #444;
+    max-width: 170px;
+}
+.autocomplete-suggestions .products .price { color:#a72203; font-weight: bold; }
