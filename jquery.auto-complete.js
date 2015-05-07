@@ -269,7 +269,7 @@
         source: 0,
         minChars: 2,
         delay: 70,
-        cache: 1,
+        cache: 0,
         menuClass: '',
         renderItem: function (item, search){
             var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
