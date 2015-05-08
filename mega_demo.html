@@ -20,9 +20,10 @@
                     var suggestions = [];
                     var products = [];
                     var brands = [];
+                    var used_for = [];
                     $.ajax({
-                        url: "http://search.saltcityoptics.com/suggest",
-                        //url: "http://ss.dev/suggest",
+                        //url: "http://search.saltcityoptics.com/suggest",
+                        url: "http://ss.dev/suggest",
                         jsonp: "callback",
                         dataType: "jsonp",
                         data: {
@@ -38,9 +39,11 @@
                                     products.push(item);
                                 } else if (item.type == "brand") {
                                     brands.push(item);
+                                } else if (item.type == "used_for") {
+                                    used_for.push(item);
                                 }
                             });
-                            suggest(suggestions, products, brands);
+                            suggest(suggestions, products, brands, used_for);
                         }
                     });
                 }

@@ -101,9 +101,10 @@
             function getSecondaryData(val) {
                 var products = [];
                 var brands = [];
+                var used_for = [];
                 $.ajax({
-                    url: "http://search.saltcityoptics.com/suggest",
-                    //url: "http://ss.dev/suggest",
+                    //url: "http://search.saltcityoptics.com/suggest",
+                    url: "http://ss.dev/suggest",
                     jsonp: "callback",
                     dataType: "jsonp",
                     data: {
@@ -117,31 +118,33 @@
                                 products.push(item);
                             } else if (item.type == "brand") {
                                 brands.push(item);
+                            } else if (item.type == "used_for") {
+                                used_for.push(item);
                             }
                         });
-                        refreshSecondaryData(val, products, brands);
+                        refreshSecondaryData(val, products, brands, used_for);
                     }
                 });
             }
 
-            function refreshSecondaryData(val, products, brands) {
+            function refreshSecondaryData(val, products, brands, used_for) {
                 $('.autocomplete-suggestions div.products_container').fadeOut('fast', function () {
                     $(this).html(renderProducts(products, val)).fadeIn('fast');
                 });
                 $('.autocomplete-suggestions div.cats_container').fadeOut('fast', function () {
-                    $(this).html(renderCats(brands)).fadeIn('fast');
+                    $(this).html(renderCats(brands, used_for)).fadeIn('fast');
                 });
                 //$('.autocomplete-suggestions div.products').html(renderProducts(products));
                 //$('.autocomplete-suggestions div.cats').html(renderCats(brands));
             }
 
-            function suggest(suggestions, products, brands){
+            function suggest(suggestions, products, brands, used_for) {
                 var val = that.val();
                 that.cache[val] = suggestions; //hmmm, will this populate all fields (brands, products) EDIT: nope!
                 if (suggestions.length && val.length >= o.minChars) {
                     s = renderSuggestions(suggestions, val);
                     if (products) s += renderProducts(products, val);
-                    if (brands) s += renderCats(brands);
+                    if (brands || used_for) s += renderCats(brands, used_for);
                     that.sc.html(s);
                     that.updateSC(0);
                 }
@@ -176,16 +179,25 @@
                 return output;
             }
 
-            function renderCats(brands) {
-                console.log(brands[0]);
+            function renderCats(brands, used_for) {
+                //console.log(brands[0]);
                 var output = '<div class="cats" style="float:left;width:200px;height:400px">';
                 output += '<div class="cats_container">';
+
                 output += '<h3>Brands</h3>';
                 output += '<ul>';
                 for (i=0;i<brands.length;i++) {
                     output += '<li>'+brands[i].value+'</li>';
                 }
                 output += '</ul>';
+
+                output += '<h3>Used For</h3>';
+                output += '<ul>';
+                for (i=0;i<used_for.length;i++) {
+                    output += '<li>'+used_for[i].value+'</li>';
+                }
+                output += '</ul>';
+
                 output += '</div>';
                 output += '</div>';
                 return output;
