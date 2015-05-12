@@ -103,8 +103,8 @@
                 var brands = [];
                 var used_for = [];
                 $.ajax({
-                    //url: "http://search.saltcityoptics.com/suggest",
-                    url: "http://ss.dev/suggest",
+                    url: "http://ss.staging.cloud-results.com/suggest",
+                    //url: "http://ss.dev/suggest",
                     jsonp: "callback",
                     dataType: "jsonp",
                     data: {
