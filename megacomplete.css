@@ -7,10 +7,11 @@ body { background-image: url("img/bg.jpg"); background-repeat: no-repeat; }
     text-align: left;
     cursor: default;
     border: 1px solid #ebebeb;
-    background: #FFFFFF;
+    background:#f2f2f2;
     font-family: arial;
     border-bottom-color: #333E69;
     margin-top: 1px;
+    /*word-wrap: break-word;*/
 
     /* core styles should not be changed */
     position: absolute;
@@ -22,9 +23,9 @@ body { background-image: url("img/bg.jpg"); background-repeat: no-repeat; }
     box-sizing: border-box;
     width:940px;
 }
-.autocomplete-suggestion { cursor:pointer; position: relative; padding: 15px 15px; white-space: nowrap; overflow: hidden; font-size: 15px; color: #555; }
+.autocomplete-suggestion { background: #FFFFFF; cursor:pointer; position: relative; padding: 15px 15px; /*white-space: nowrap;*/ overflow: hidden; font-size: 15px; color: #555; }
 .autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
-.autocomplete-suggestion.selected { background: #f2f2f2; font-weight: bold; color:#333E69; text-decoration: underline; }
+.autocomplete-suggestion.selected { background: #f2f2f2; color:#333E69; text-decoration: underline; }
 .autocomplete-suggestions h3 {
     padding-top: 10px;
     margin: 0;
@@ -33,9 +34,10 @@ body { background-image: url("img/bg.jpg"); background-repeat: no-repeat; }
     color: #333E69;
     padding-left: 15px;
 }
-.autocomplete-suggestions .products {  float:left; width:534px; background:#f2f2f2; height:470px; }
+.autocomplete-suggestions .products {  float:left; width:534px; }
 .autocomplete-suggestions .products .product_box { padding-top:15px; margin:0 10px; float:left; height:200px; width:158px; text-align:center;}
-.autocomplete-suggestions .products .title {   word-wrap: break-word; }
+.autocomplete-suggestions .products .title {   word-wrap: break-word; padding: 3px 0; }
+.autocomplete-suggestions .products .title a { text-decoration: none; }
 .autocomplete-suggestions .products .title h4 {
     margin: 0 auto;
     font-size: 12px;
@@ -46,3 +48,15 @@ body { background-image: url("img/bg.jpg"); background-repeat: no-repeat; }
     max-width: 170px;
 }
 .autocomplete-suggestions .products .price { color:#a72203; font-weight: bold; }
+
+.autocomplete-suggestions .input-group { display: table; padding: 10px 0 10px 11px; }
+.autocomplete-suggestions .input-group .checkbox { display: block; min-height: 20px; margin-bottom: 4px; }
+.autocomplete-suggestions .input-group .checkbox label { display: inline; font-weight: normal; cursor: pointer; font-size: 13px;  }
+.autocomplete-suggestions .input-group .checkbox input[type=radio], .autocomplete-suggestions .input-group .checkbox input[type=checkbox] {
+    line-height: normal;
+    width: 13px;
+    margin-right: 5px;
+}
+
+.autocomplete-suggestions #cats_container { background-color: #FFFFFF; }
+

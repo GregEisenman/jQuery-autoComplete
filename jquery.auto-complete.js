@@ -134,6 +134,8 @@
                 $('.autocomplete-suggestions div.cats_container').fadeOut('fast', function () {
                     $(this).html(renderCats(brands, used_for)).fadeIn('fast');
                 });
+                var cats_height = document.getElementById('mega_suggestions').scrollHeight;
+                document.getElementById("cats_container").setAttribute("style","height:"+cats_height+"px;");
                 //$('.autocomplete-suggestions div.products').html(renderProducts(products));
                 //$('.autocomplete-suggestions div.cats').html(renderCats(brands));
             }
@@ -147,6 +149,9 @@
                     if (brands || used_for) s += renderCats(brands, used_for);
                     that.sc.html(s);
                     that.updateSC(0);
+                    var cats_height = document.getElementById('mega_suggestions').scrollHeight;
+                    document.getElementById("cats_container").setAttribute("style","height:"+cats_height+"px;");
+
                 }
                 else
                     that.sc.hide();
@@ -154,7 +159,7 @@
 
             function renderSuggestions(suggestions, val) {
                 //console.log(val);
-                var output = '<div class="mega_suggestions" style="float:left;width:200px;">';
+                var output = '<div id="mega_suggestions" style="float:left;width:200px;">';
                 for (i=0;i<suggestions.length;i++) {
                     output += o.renderItem(suggestions[i], val);
                 }
@@ -181,22 +186,26 @@
 
             function renderCats(brands, used_for) {
                 //console.log(brands[0]);
-                var output = '<div class="cats" style="float:left;width:200px;height:400px">';
-                output += '<div class="cats_container">';
+                var output = '<div id="cats" style="float:left;width:200px;">';
+                output += '<div id="cats_container">';
 
                 output += '<h3>Brands</h3>';
-                output += '<ul>';
+                output += '<div class="input-group">';
                 for (i=0;i<brands.length;i++) {
-                    output += '<li>'+brands[i].value+'</li>';
+                    output += '<div class="checkbox"><label>';
+                    output += '<input type="checkbox">'+brands[i].value;
+                    output += '</label></div>';
                 }
-                output += '</ul>';
+                output += '</div>';
 
                 output += '<h3>Used For</h3>';
-                output += '<ul>';
+                output += '<div class="input-group">';
                 for (i=0;i<used_for.length;i++) {
-                    output += '<li>'+used_for[i].value+'</li>';
+                    output += '<div class="checkbox"><label>';
+                    output += '<input type="checkbox">'+used_for[i].value;
+                    output += '</label></div>';
                 }
-                output += '</ul>';
+                output += '</div>';
 
                 output += '</div>';
                 output += '</div>';
